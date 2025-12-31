@@ -1,0 +1,356 @@
+@import "tailwindcss";
+
+@theme {
+  /* Deep Navy Base - Professional, not generic */
+  --color-background: oklch(0.2 0.02 250);
+  --color-foreground: oklch(0.95 0.01 250);
+  
+  --color-card: oklch(0.22 0.02 250);
+  --color-card-foreground: oklch(0.95 0.01 250);
+  
+  --color-popover: oklch(0.22 0.02 250);
+  --color-popover-foreground: oklch(0.95 0.01 250);
+  
+  /* Electric Cyan Accent - Signature color */
+  --color-primary: oklch(0.7 0.15 200);
+  --color-primary-foreground: oklch(0.2 0.02 250);
+  
+  --color-secondary: oklch(0.25 0.02 250);
+  --color-secondary-foreground: oklch(0.95 0.01 250);
+  
+  --color-muted: oklch(0.24 0.02 250);
+  --color-muted-foreground: oklch(0.6 0.01 250);
+  
+  --color-accent: oklch(0.7 0.15 200);
+  --color-accent-foreground: oklch(0.2 0.02 250);
+  
+  /* Semantic Colors - Unique palette */
+  --color-success: oklch(0.7 0.12 150);
+  --color-success-foreground: oklch(0.2 0.12 150);
+  
+  --color-warning: oklch(0.75 0.15 80);
+  --color-warning-foreground: oklch(0.2 0.15 80);
+  
+  --color-destructive: oklch(0.65 0.15 25);
+  --color-destructive-foreground: oklch(0.98 0.01 25);
+  
+  --color-info: oklch(0.65 0.12 280);
+  --color-info-foreground: oklch(0.2 0.12 280);
+  
+  /* Agent-specific colors */
+  --color-agent-qa: oklch(0.7 0.12 150);
+  --color-agent-security: oklch(0.65 0.15 25);
+  --color-agent-performance: oklch(0.75 0.15 80);
+  --color-agent-architecture: oklch(0.65 0.12 280);
+  
+  --color-border: oklch(0.3 0.02 250);
+  --color-input: oklch(0.3 0.02 250);
+  --color-ring: oklch(0.7 0.15 200);
+  
+  --radius: 0.75rem;
+}
+
+@layer base {
+  body {
+    font-feature-settings: "rlig" 1, "calt" 1;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background-color: var(--color-background);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--color-muted);
+    border-radius: 9999px;
+    transition: background-color 0.2s;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: color-mix(in oklch, var(--color-muted-foreground) 50%, transparent);
+  }
+  
+  /* Selection */
+  ::selection {
+    background-color: color-mix(in oklch, var(--color-primary) 30%, transparent);
+    color: var(--color-foreground);
+  }
+}
+
+@layer components {
+  /* Glow effect utility */
+  .glow-primary {
+    box-shadow: 0 0 20px color-mix(in oklch, var(--color-primary) 30%, transparent),
+                0 0 40px color-mix(in oklch, var(--color-primary) 30%, transparent);
+  }
+  
+  .glow-success {
+    box-shadow: 0 0 20px color-mix(in oklch, var(--color-success) 30%, transparent),
+                0 0 40px color-mix(in oklch, var(--color-success) 30%, transparent);
+  }
+  
+  .glow-warning {
+    box-shadow: 0 0 20px color-mix(in oklch, var(--color-warning) 30%, transparent),
+                0 0 40px color-mix(in oklch, var(--color-warning) 30%, transparent);
+  }
+  
+  .glow-error {
+    box-shadow: 0 0 20px color-mix(in oklch, var(--color-destructive) 30%, transparent),
+                0 0 40px color-mix(in oklch, var(--color-destructive) 30%, transparent);
+  }
+  
+  /* Gradient border */
+  .gradient-border {
+    position: relative;
+    background: var(--color-card);
+    border-radius: var(--radius);
+  }
+  
+  .gradient-border::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius);
+    padding: 1px;
+    background: linear-gradient(135deg, 
+      var(--color-primary) 0%, 
+      var(--color-info) 50%,
+      var(--color-primary) 100%
+    );
+    -webkit-mask: 
+      linear-gradient(#fff 0 0) content-box, 
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0.5;
+  }
+  
+  /* Animated grid background */
+  .grid-background {
+    background-image: 
+      linear-gradient(to right, var(--color-border) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--color-border) 1px, transparent 1px);
+    background-size: 24px 24px;
+    animation: grid-move 20s linear infinite;
+  }
+  
+  @keyframes grid-move {
+    0% {
+      background-position: 0 0;
+    }
+    100% {
+      background-position: 24px 24px;
+    }
+  }
+  
+  /* Command block (Warp-inspired) */
+  .command-block {
+    background-color: var(--color-card);
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    transition: all 0.2s;
+  }
+  
+  .command-block:hover {
+    border-color: color-mix(in oklch, var(--color-primary) 50%, transparent);
+    box-shadow: 0 0 20px color-mix(in oklch, var(--color-primary) 30%, transparent),
+                0 8px 16px -4px rgba(0, 0, 0, 0.4);
+  }
+  
+  /* Agent status indicator */
+  .agent-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .agent-status-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 9999px;
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+  
+  @keyframes pulse-glow {
+    0%, 100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.5;
+      transform: scale(1.2);
+    }
+  }
+  
+  /* Terminal output */
+  .terminal-output {
+    background-color: color-mix(in oklch, var(--color-background) 50%, transparent);
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.875rem;
+    overflow: auto;
+    max-height: 24rem;
+  }
+  
+  .terminal-line {
+    padding: 0.25rem 0;
+  }
+  
+  .terminal-line:hover {
+    background-color: color-mix(in oklch, var(--color-muted) 30%, transparent);
+  }
+  
+  /* Inline annotation */
+  .inline-annotation {
+    position: absolute;
+    left: 100%;
+    margin-left: 1rem;
+    z-index: 10;
+    background-color: var(--color-card);
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+    min-width: 300px;
+    max-width: 400px;
+  }
+  
+  /* Drag overlay */
+  .drag-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    background-color: color-mix(in oklch, var(--color-primary) 10%, transparent);
+    backdrop-filter: blur(4px);
+    border: 4px dashed var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Success animation */
+  .success-checkmark {
+    animation: checkmark-draw 0.4s ease-out forwards;
+  }
+  
+  @keyframes checkmark-draw {
+    0% {
+      stroke-dashoffset: 100;
+    }
+    100% {
+      stroke-dashoffset: 0;
+    }
+  }
+  
+  /* Error shake */
+  .error-shake {
+    animation: shake 0.4s ease-in-out;
+  }
+  
+  @keyframes shake {
+    0%, 100% {
+      transform: translateX(0);
+    }
+    25% {
+      transform: translateX(-10px);
+    }
+    75% {
+      transform: translateX(10px);
+    }
+  }
+  
+  /* Skeleton loading */
+  .skeleton {
+    background-color: var(--color-muted);
+    animation: skeleton-pulse 2s ease-in-out infinite;
+    border-radius: 0.25rem;
+  }
+  
+  @keyframes skeleton-pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+  
+  /* Stagger animation */
+  .stagger-item {
+    opacity: 0;
+    transform: translateY(10px);
+    animation: stagger-in 0.3s ease-out forwards;
+  }
+  
+  @keyframes stagger-in {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .stagger-item:nth-child(1) { animation-delay: 0.05s; }
+  .stagger-item:nth-child(2) { animation-delay: 0.1s; }
+  .stagger-item:nth-child(3) { animation-delay: 0.15s; }
+  .stagger-item:nth-child(4) { animation-delay: 0.2s; }
+  .stagger-item:nth-child(5) { animation-delay: 0.25s; }
+}
+
+@layer utilities {
+  /* Text gradient */
+  .text-gradient {
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    background-image: linear-gradient(135deg, 
+      var(--color-primary) 0%, 
+      var(--color-info) 100%
+    );
+  }
+  
+  /* Glass morphism */
+  .glass {
+    background-color: color-mix(in oklch, var(--color-card) 50%, transparent);
+    backdrop-filter: blur(24px);
+    border: 1px solid color-mix(in oklch, var(--color-border) 50%, transparent);
+  }
+  
+  /* Hover lift */
+  .hover-lift {
+    transition: transform 0.2s;
+  }
+  
+  .hover-lift:hover {
+    transform: translateY(-0.25rem);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Focus ring */
+  .focus-ring:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--color-background), 0 0 0 4px var(--color-ring);
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
