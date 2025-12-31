@@ -1,0 +1,340 @@
+{
+  "name": "Code-on-Fly Orchestrator",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "code-request",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-slack",
+      "name": "Slack Request Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "functionCode": "// Parse Slack command\nconst text = $input.item.json.text;\nconst userId = $input.item.json.user_id;\nconst channelId = $input.item.json.channel_id;\n\n// Create project context\nconst projectId = `project-${Date.now()}`;\nconst timestamp = new Date().toISOString();\n\nreturn {\n  json: {\n    projectId,\n    request: text,\n    userId,\n    channelId,\n    timestamp,\n    status: 'planning'\n  }\n};"
+      },
+      "id": "parse-request",
+      "name": "Parse Request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "channel": "={{$json.channelId}}",
+        "text": "🤖 Code-on-Fly Team activated!\n\n*Request:* {{$json.request}}\n*Project ID:* {{$json.projectId}}\n\nThe council is now debating the best approach..."
+      },
+      "id": "slack-ack",
+      "name": "Slack Acknowledgment",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 1,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "url": "http://council:8001/council/plan",
+        "method": "POST",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "request",
+              "value": "={{$json.request}}"
+            },
+            {
+              "name": "context",
+              "value": "={}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "council-plan",
+      "name": "LLM Council - Plan",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [850, 300]
+    },
+    {
+      "parameters": {
+        "channel": "={{$('Parse Request').item.json.channelId}}",
+        "text": "✅ *Planning Complete!*\n\n*Complexity:* {{$json.estimated_complexity}}\n*Council Consensus:* {{$json.council_consensus * 100}}%\n*Features to Implement:* {{$json.features.length}}\n\nStarting implementation..."
+      },
+      "id": "slack-plan-complete",
+      "name": "Slack Plan Complete",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 1,
+      "position": [1050, 300]
+    },
+    {
+      "parameters": {
+        "url": "http://coder:8002/code/implement",
+        "method": "POST",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "plan",
+              "value": "={{$json}}"
+            },
+            {
+              "name": "project_dir",
+              "value": "={{$('Parse Request').item.json.projectId}}"
+            },
+            {
+              "name": "webhook_url",
+              "value": "={{$workflow.url}}/webhook/progress"
+            },
+            {
+              "name": "max_iterations",
+              "value": "50"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "start-coding",
+      "name": "Start Autonomous Coder",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1250, 300]
+    },
+    {
+      "parameters": {
+        "path": "progress",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-progress",
+      "name": "Progress Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 500]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.event}}",
+              "operation": "equals",
+              "value2": "test_progress"
+            }
+          ]
+        }
+      },
+      "id": "check-event-type",
+      "name": "Check Event Type",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [450, 500]
+    },
+    {
+      "parameters": {
+        "channel": "={{$('Parse Request').item.json.channelId}}",
+        "text": "⚙️ *Progress Update*\n\n{{$json.percentage}}% Complete ({{$json.passing}}/{{$json.total}} features)\n\n*Recently Completed:*\n{{$json.completed_tests.join('\\n')}}"
+      },
+      "id": "slack-progress",
+      "name": "Slack Progress Update",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 1,
+      "position": [650, 400]
+    },
+    {
+      "parameters": {
+        "url": "http://council:8001/council/review",
+        "method": "POST",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "code",
+              "value": "={{$json.code}}"
+            },
+            {
+              "name": "tests",
+              "value": "={{$json.tests}}"
+            },
+            {
+              "name": "original_plan",
+              "value": "={{$('LLM Council - Plan').item.json}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "council-review",
+      "name": "LLM Council - Review",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [650, 600]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.verdict}}",
+              "operation": "equals",
+              "value2": "APPROVE"
+            }
+          ]
+        }
+      },
+      "id": "check-verdict",
+      "name": "Check Verdict",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [850, 600]
+    },
+    {
+      "parameters": {
+        "channel": "={{$('Parse Request').item.json.channelId}}",
+        "text": "🚀 *Deployment Complete!*\n\n*Project:* {{$('Parse Request').item.json.projectId}}\n*Features Implemented:* {{$('LLM Council - Plan').item.json.features.length}}\n\n*Quality Scores:*\n• Security: {{$json.security_score}}/100\n• Performance: {{$json.performance_score}}/100\n• Test Coverage: {{$json.test_coverage}}%\n\n*Council Consensus:* {{$json.council_consensus * 100}}%\n\nCode is ready for review!"
+      },
+      "id": "slack-deploy",
+      "name": "Slack Deployment Success",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 1,
+      "position": [1050, 500]
+    },
+    {
+      "parameters": {
+        "channel": "={{$('Parse Request').item.json.channelId}}",
+        "text": "⚠️ *Code Review: Revisions Needed*\n\n*Required Changes:*\n{{$json.required_changes.join('\\n')}}\n\nRe-running implementation..."
+      },
+      "id": "slack-revise",
+      "name": "Slack Revisions Needed",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 1,
+      "position": [1050, 700]
+    }
+  ],
+  "connections": {
+    "Slack Request Webhook": {
+      "main": [
+        [
+          {
+            "node": "Parse Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Request": {
+      "main": [
+        [
+          {
+            "node": "Slack Acknowledgment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slack Acknowledgment": {
+      "main": [
+        [
+          {
+            "node": "LLM Council - Plan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LLM Council - Plan": {
+      "main": [
+        [
+          {
+            "node": "Slack Plan Complete",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slack Plan Complete": {
+      "main": [
+        [
+          {
+            "node": "Start Autonomous Coder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Progress Webhook": {
+      "main": [
+        [
+          {
+            "node": "Check Event Type",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Event Type": {
+      "main": [
+        [
+          {
+            "node": "Slack Progress Update",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "LLM Council - Review",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LLM Council - Review": {
+      "main": [
+        [
+          {
+            "node": "Check Verdict",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Verdict": {
+      "main": [
+        [
+          {
+            "node": "Slack Deployment Success",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Slack Revisions Needed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 2,
+  "updatedAt": "2025-12-23T00:00:00.000Z",
+  "versionId": "1"
+}

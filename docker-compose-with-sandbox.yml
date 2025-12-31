@@ -1,0 +1,77 @@
+version: '3.8'
+
+services:
+  council:
+    build: ./council
+    container_name: llm-council
+    environment:
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+    ports:
+      - "8001:8001"
+    restart: unless-stopped
+    networks:
+      - code-on-fly
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  sandbox:
+    build: ./sandbox
+    container_name: sandbox-service
+    environment:
+      - E2B_API_KEY=${E2B_API_KEY}
+    ports:
+      - "8003:8003"
+    restart: unless-stopped
+    networks:
+      - code-on-fly
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8003/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  coder:
+    build:
+      context: ./coder
+      dockerfile: Dockerfile.sandbox
+    container_name: autonomous-coder
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - SANDBOX_SERVICE_URL=http://sandbox:8003
+      - N8N_WEBHOOK_URL=${N8N_WEBHOOK_BASE}/progress
+    volumes:
+      - ./projects:/projects
+    ports:
+      - "8002:8002"
+    restart: unless-stopped
+    networks:
+      - code-on-fly
+    depends_on:
+      - sandbox
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8002/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  redis:
+    image: redis:7-alpine
+    container_name: code-on-fly-redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+    networks:
+      - code-on-fly
+    volumes:
+      - redis-data:/data
+
+networks:
+  code-on-fly:
+    driver: bridge
+
+volumes:
+  projects:
+  redis-data:

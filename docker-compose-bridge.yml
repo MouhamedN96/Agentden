@@ -1,0 +1,82 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: bridge-redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+    networks:
+      - bridge-network
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  council:
+    build:
+      context: ./council
+      dockerfile: Dockerfile.enhanced
+    container_name: enhanced-council
+    environment:
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+    ports:
+      - "8001:8001"
+    restart: unless-stopped
+    networks:
+      - bridge-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  sandbox:
+    build: ./sandbox
+    container_name: sandbox-service
+    environment:
+      - E2B_API_KEY=${E2B_API_KEY}
+    ports:
+      - "8003:8003"
+    restart: unless-stopped
+    networks:
+      - bridge-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8003/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  bridge:
+    build: ./bridge/api
+    container_name: bridge-service
+    environment:
+      - COUNCIL_URL=http://council:8001
+      - SANDBOX_URL=http://sandbox:8003
+      - REDIS_URL=redis://redis:6379
+      - PORT=8004
+    ports:
+      - "8004:8004"
+    restart: unless-stopped
+    networks:
+      - bridge-network
+    depends_on:
+      - redis
+      - council
+      - sandbox
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8004/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  bridge-network:
+    driver: bridge
+
+volumes:
+  redis-data:
