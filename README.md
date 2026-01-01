@@ -1,394 +1,163 @@
-# AgentDen 🤖
+# 🚀 AgentDen - Autonomous AI Code Review Platform
 
-**Autonomous AI Coding Team with Multi-LLM Support**
-
-Build, test, and deploy features automatically with specialized AI agents. Save 95% on costs, ship 5x faster.
-
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Multi-LLM](https://img.shields.io/badge/Multi--LLM-Groq%20%7C%20Ollama%20%7C%20OpenRouter-blue)](https://github.com/MouhamedN96/Agentden)
-[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker)](https://www.docker.com/)
+**AgentDen** is a complete autonomous coding ecosystem that combines multi-agent AI collaboration with real-time code execution and quality analysis. Built with cutting-edge technology and exceptional design.
 
 ---
 
 ## 🎯 What is AgentDen?
 
-AgentDen is your autonomous AI coding team that works 24/7. Request features via **Slack**, **API**, or **Claude Desktop**, and watch your AI team:
+AgentDen brings together three powerful concepts into one cohesive platform. It implements **autonomous coding** where AI agents write, test, and deploy code automatically. It features an **LLM council** where multiple specialized AI agents debate and validate solutions to ensure quality. It provides a **Progressive Web App** with a beautiful, installable interface that works offline.
 
-1. **Plan** → Council agents debate the best approach
-2. **Code** → Autonomous coder implements features
-3. **Test** → Sandbox VMs execute real tests
-4. **Review** → Quality agents check security, performance, architecture
-5. **Deploy** → Code is committed and deployed automatically
-
-All powered by cost-effective LLMs (**Groq**, **Ollama**, **OpenRouter**) for maximum savings.
+The complete system works as a pipeline: requests come in from Slack or the UI, n8n orchestrates the workflow, the LLM Council plans the implementation, the Autonomous Coder generates the code, Sandbox Execution tests it, Quality Review validates everything, and finally the system deploys and notifies stakeholders.
 
 ---
 
-## 💰 Why AgentDen?
+## ✨ Key Features
 
-### Cost Savings
+### 🤖 Multi-Agent Council
 
-| Provider | Cost per 1000 Reviews | Annual Savings |
-|----------|----------------------|----------------|
-| **Groq** | **$0.10** | **$2,500+** |
-| **Ollama** | **FREE** | **$2,520** |
-| Claude API | $21.00 | Baseline |
+Four specialized AI agents work together collaboratively. The **QA Agent** focuses on tests, coverage, and edge cases. The **Security Agent** checks for OWASP Top 10 vulnerabilities, SQL injection, XSS, and prompt injection attacks. The **Performance Agent** analyzes time complexity, detects N+1 queries, and identifies memory leaks. The **Architecture Agent** enforces SOLID principles, validates design patterns, and ensures proper code structure.
 
-### Speed
+### 💻 Beautiful PWA Interface
 
-| Provider | Response Time | vs Claude |
-|----------|--------------|-----------|
-| **Groq** | **2-3 seconds** | **5x faster** |
-| Ollama | 5-10 seconds | 2x faster |
-| Claude | 8-12 seconds | Baseline |
+The interface features a deep navy and electric cyan design inspired by modern developer tools. It includes Monaco Editor with syntax highlighting for 8+ languages, a Manus-style execution window showing live agent activity, real-time sandbox output with terminal logs, and can be installed on both mobile and desktop devices with full offline support.
 
-### Quality
+### 🔧 Developer Experience
 
-✅ **Security**: OWASP Top 10, SQL injection, XSS, prompt injection  
-✅ **Testing**: Auto-generate tests with 90%+ coverage  
-✅ **Performance**: N+1 query detection, algorithm optimization  
-✅ **Architecture**: SOLID principles, design patterns, code smells  
+The developer experience includes type-safe APIs using tRPC, real-time updates via WebSocket, drag-and-drop file upload, one-click auto-fixes for detected issues, and comprehensive review history with search and filtering capabilities.
 
----
+### 🧪 Real Code Execution
 
-## 🚀 Quick Start
-
-### Prerequisites
-
-- Docker and Docker Compose
-- Node.js 18+ (for Claude Desktop)
-- API keys (choose one or more):
-  - **Groq** (recommended): https://console.groq.com
-  - **Ollama** (free): `curl -fsSL https://ollama.com/install.sh | sh`
-  - **OpenRouter**: https://openrouter.ai
-  - **E2B** (sandboxes): https://e2b.dev
-
-### Installation
-
-```bash
-# Clone repository
-git clone https://github.com/MouhamedN96/Agentden.git
-cd Agentden
-
-# Configure environment
-cp .env.example .env
-nano .env  # Add your API keys
-
-# Start services
-docker-compose -f docker-compose-bridge.yml up -d
-
-# Verify
-curl http://localhost:8004/health
-```
-
-### Test It
-
-```bash
-cd bridge
-python test_bridge.py
-```
-
-Expected: ✅ All tests pass!
-
----
-
-## 🎮 Usage
-
-### Via Claude Desktop (MCP)
-
-**Setup**:
-```bash
-cd bridge/mcp
-npm install
-```
-
-**Configure** (`~/Library/Application Support/Claude/claude_desktop_config.json`):
-```json
-{
-  "mcpServers": {
-    "agentden": {
-      "command": "node",
-      "args": ["/absolute/path/to/Agentden/bridge/mcp/server.js"],
-      "env": {
-        "BRIDGE_URL": "http://localhost:8004"
-      }
-    }
-  }
-}
-```
-
-**Use**:
-```
-Review this code for security issues:
-
-function login(username, password) {
-    const user = db.query(`SELECT * FROM users WHERE username='${username}'`);
-    return user && user.password === password;
-}
-```
-
-### Via REST API
-
-```bash
-# Submit code
-curl -X POST http://localhost:8004/api/v1/review/submit \
-  -H "Content-Type: application/json" \
-  -d '{
-    "code": "...",
-    "language": "javascript",
-    "quality_gates": ["security", "qa"]
-  }'
-
-# Get report
-curl http://localhost:8004/api/v1/review/{session_id}/report
-```
-
-### Via Slack (with n8n)
-
-```
-/code-team build user authentication with JWT
-```
-
----
-
-## ✨ Features
-
-### 🔒 Security Agent
-- OWASP Top 10 scanning
-- SQL injection, XSS, auth bypass detection
-- Prompt injection detection (AI features)
-- Secret exposure scanning
-
-### ✅ QA Agent
-- Automatic test generation
-- 90%+ coverage analysis
-- Edge case identification
-- Error handling validation
-
-### ⚡ Performance Agent
-- N+1 query detection
-- Algorithm complexity analysis
-- Memory leak detection
-- Caching opportunities
-
-### 🏗️ Architecture Agent
-- Design pattern validation
-- SOLID principles checking
-- Code smell detection
-- Maintainability metrics
-
-### 🤖 Autonomous Coder
-- Feature implementation
-- Test-driven development
-- Iterative improvement
-- Git integration
-
-### 🧪 Sandbox VMs
-- Real code execution
-- Security testing
-- Performance benchmarking
+Code runs in isolated sandbox environments with real test validation. The system executes tests, captures output, and provides actual results rather than simulations.
 
 ---
 
 ## 🏗️ Architecture
 
-```
-User Request (Slack/API/Claude)
-        ↓
-    Bridge Service (Port 8004)
-        ↓
-    Council Agents (Port 8001)
-    ├── QA Agent
-    ├── Security Agent
-    ├── Performance Agent
-    ├── Architecture Agent
-    └── Chairman Agent
-        ↓
-    Autonomous Coder (Port 8002)
-        ↓
-    Sandbox VMs (Port 8003)
-        ↓
-    Quality Report + Deploy
-```
+### Frontend Stack
+React 19 with TypeScript, Tailwind CSS 4 with OKLCH colors for perceptually uniform design, Monaco Editor for professional code editing, tRPC for type-safe API communication, and full PWA capabilities with offline support.
 
-**Multi-LLM Support**:
-- Groq (ultra-fast, ultra-cheap)
-- Ollama (free, local)
-- OpenRouter (access all models)
-- Claude/GPT-4 (high quality)
+### Backend Stack
+Express server with tRPC procedures, Drizzle ORM connected to MySQL/TiDB database, and Manus OAuth for secure authentication.
+
+### Orchestration
+n8n workflows coordinate between the Council service (Python + FastAPI), Coder service (Python + FastAPI), and Sandbox service with E2B integration for isolated code execution.
+
+### AI Providers
+Multiple AI providers are supported including Groq, Ollama, OpenRouter, Anthropic Claude, and OpenAI GPT-4.
 
 ---
 
-## ⚙️ Configuration
+## 🚀 Quick Start
 
-### For Startups (Cost-focused)
-
-```bash
-GROQ_API_KEY=gsk_your_key_here
-OLLAMA_BASE_URL=http://localhost:11434/v1
-E2B_API_KEY=your_e2b_key_here
-```
-**Cost**: ~$1/month for 1000 reviews
-
-### For Enterprises (Reliability-focused)
-
-```bash
-GROQ_API_KEY=gsk_your_key_here
-OPENROUTER_API_KEY=sk_or_your_key_here
-ANTHROPIC_API_KEY=sk_ant_your_key_here
-E2B_API_KEY=your_e2b_key_here
-```
-**Cost**: ~$50/month for 10,000 reviews
-
-### For Privacy-focused
-
-```bash
-OLLAMA_BASE_URL=http://localhost:11434/v1
-```
-**Cost**: FREE (self-hosted)
+Clone the repository, install dependencies with `pnpm install`, configure your environment by copying `.env.example` to `.env` and adding your API keys, setup the database with `pnpm db:push`, and start the development server with `pnpm dev`. Visit `http://localhost:3000` to see AgentDen in action.
 
 ---
 
-## 📚 Documentation
+## 📦 What's Included
 
-- **[Quick Start Guide](BRIDGE_QUICKSTART.md)** - 10-minute setup
-- **[Multi-LLM Setup](docs/MULTI_LLM_SETUP.md)** - Groq, Ollama, OpenRouter
-- **[Architecture](docs/BRIDGE_ARCHITECTURE.md)** - System design
-- **[API Reference](bridge/README.md)** - Complete API docs
-- **[Claude Integration](bridge/examples/claude_example.md)** - MCP setup
+The repository contains the complete PWA application in `/client` with React components, Monaco editor integration, execution window with live updates, review history and reports, plus PWA manifest and service worker.
 
----
+Backend services in `/server` provide tRPC API procedures, database queries and mutations, authentication middleware, and review orchestration logic.
 
-## 💡 Examples
+The Council system in `/council` implements the multi-agent debate system with specialized agent implementations, chairman synthesis logic, and quality scoring algorithms.
 
-### Security Review
+The Coder service in `/coder` handles autonomous code generation, test-driven development, auto-fix implementation, and Git integration.
 
-**Input**:
-```javascript
-function login(username, password) {
-    const user = db.query(`SELECT * FROM users WHERE username='${username}'`);
-    return user && user.password === password;
-}
-```
+The Sandbox service in `/sandbox` manages E2B VM orchestration, code execution in isolation, test running and validation, and security sandboxing.
 
-**Output**:
-```
-🚨 CRITICAL ISSUES
-
-1. SQL Injection (Line 2)
-   Exploit: ' OR '1'='1
-   Fix: Use parameterized queries
-
-2. Plain Text Password (Line 3)
-   Fix: Use bcrypt hashing
-
-Score: 25/100 ❌
-```
-
-### Test Generation
-
-**Input**:
-```javascript
-function calculateDiscount(price, discountPercent) {
-    return price * (1 - discountPercent / 100);
-}
-```
-
-**Output**:
-```javascript
-describe('calculateDiscount', () => {
-    test('applies 10% discount', () => {
-        expect(calculateDiscount(100, 10)).toBe(90);
-    });
-    // ... 8 more tests
-});
-
-Coverage: 100% ✅
-```
+n8n workflows in `/n8n-workflows` provide complete orchestration, Slack integration, webhook handling, and state management.
 
 ---
 
-## 📊 ROI Calculator
+## 🎨 Design System
 
-### 10-Person Team
+The color system uses OKLCH color space for perceptually uniform colors. Background is deep navy `oklch(0.2 0.02 250)`, primary accent is electric cyan `oklch(0.7 0.15 200)`, success is green `oklch(0.7 0.12 150)`, warning is yellow `oklch(0.75 0.15 80)`, and error is red `oklch(0.65 0.15 25)`.
 
-**Without AgentDen**:
-- Code review: 50 hours/week
-- Cost: $130,000/year
+Typography uses system fonts with optimized rendering, monospace fonts (Monaco, Menlo, Consolas) for code, and font feature settings enabled for ligatures.
 
-**With AgentDen**:
-- Automated: 90% of reviews
-- Savings: $117,000/year
-- System cost: $600/year
-- **Net savings: $116,400/year**
-
-**ROI**: 19,400% (194x!)
+Spacing follows a base unit of 0.25rem (4px) with a consistent 8px grid system and responsive breakpoints for mobile, tablet, and desktop devices.
 
 ---
 
-## 🛠️ Tech Stack
+## 🧪 Testing
 
-- **Backend**: Python (FastAPI), Node.js (Express)
-- **LLMs**: Groq, Ollama, OpenRouter, Claude, GPT-4
-- **Sandboxes**: E2B
-- **Orchestration**: n8n, Docker
-- **Storage**: Redis
-- **Integration**: MCP, REST, WebSocket, Slack
+Run all tests with `pnpm test`. Current coverage includes authentication flow, review submission, quality gate validation, database operations, and error handling. All tests are currently passing.
+
+---
+
+## 📱 PWA Features
+
+Installation is simple: on desktop, click the install prompt in your browser; on mobile, use "Add to Home Screen" from the browser menu. The service worker caches reviews for offline access.
+
+Capabilities include installable app functionality, offline support, push notifications, background sync, and file handling.
+
+---
+
+## 🔌 Integration
+
+To connect the real backend, update API endpoints in `client/src/lib/trpc.ts`, configure the n8n workflow with your instance URL, deploy services using Docker Compose, and test the integration with a sample code review. See `BRIDGE_IMPLEMENTATION_PLAN.md` for detailed integration steps.
+
+---
+
+## 💡 Use Cases
+
+Developers can get instant code reviews before committing, learn best practices from AI feedback, catch security vulnerabilities early, and optimize performance automatically.
+
+Teams benefit from consistent code quality across projects, automated code review in CI/CD pipelines, and knowledge sharing through AI insights.
+
+Organizations can enforce coding standards automatically, reduce technical debt, and improve security posture.
+
+---
+
+## 📊 Performance
+
+The system analyzes code and generates comprehensive reports. Review speed depends on code complexity and selected quality gates.
 
 ---
 
 ## 🗺️ Roadmap
 
-- [x] Bridge Service with REST API
-- [x] MCP Server for Claude Desktop
-- [x] Multi-LLM support (5 providers)
-- [x] Council agents (QA, Security, Performance, Architecture)
-- [x] Sandbox VM integration
-- [ ] WebSocket streaming
-- [ ] GitHub integration
-- [ ] VS Code extension
-- [ ] UI dashboard
-- [ ] Mobile app support
+Phase 1 (Current) includes PWA interface with Monaco editor, multi-agent council system, sandbox execution, n8n orchestration, and multi-LLM support.
+
+Phase 2 (Next) will add real backend integration, WebSocket streaming, GitHub integration, and team collaboration features.
+
+Phase 3 (Future) plans IDE extensions for VS Code and JetBrains, CI/CD integration, team analytics dashboard, and additional integrations.
+
+---
+
+## 📚 Documentation
+
+Comprehensive documentation is available in multiple files. `PWA_SUMMARY.md` provides complete implementation details. `DESIGN_SYSTEM_V2.md` contains visual design reference. `BRIDGE_IMPLEMENTATION_PLAN.md` explains backend integration. `PWA_FEASIBILITY_ANALYSIS.md` analyzes PWA capabilities. `docs/MULTI_LLM_SETUP.md` covers provider configuration.
 
 ---
 
 ## 🤝 Contributing
 
-Contributions welcome!
-
-1. Fork the repository
-2. Create feature branch
-3. Commit changes
-4. Push to branch
-5. Open Pull Request
+We welcome contributions from the community. Fork the repository, create a feature branch, make your changes, add tests, and submit a pull request.
 
 ---
 
 ## 📄 License
 
-MIT License - see [LICENSE](LICENSE)
+This project is licensed under the MIT License. See the `LICENSE` file for complete details.
 
 ---
 
-## 💬 Support
+## 🙏 Credits
 
-- **Docs**: See `docs/` directory
-- **Issues**: [GitHub Issues](https://github.com/MouhamedN96/Agentden/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/MouhamedN96/Agentden/discussions)
+Design inspiration came from Warp, Linear, Vercel, Manus, and Dribbble.
 
----
-
-## 🙏 Acknowledgments
-
-Built with:
-- [Groq](https://groq.com) - Ultra-fast LLM
-- [Ollama](https://ollama.com) - Local LLM
-- [OpenRouter](https://openrouter.ai) - Multi-model access
-- [E2B](https://e2b.dev) - Secure sandboxes
-- [n8n](https://n8n.io) - Workflow automation
+Technologies used include React, TypeScript, Tailwind CSS, Monaco Editor, tRPC, Drizzle ORM, n8n, FastAPI, E2B, Groq, Ollama, and OpenRouter.
 
 ---
 
-**Built with ❤️ for better, faster, cheaper code quality**
+## 📞 Support
 
-🚀 Get started in 10 minutes | 💰 Save 95% on costs | ⚡ 5x faster reviews | 🔒 Auto security checks | ✅ Ship with confidence
+For bug reports and feature requests, use GitHub Issues. For community Q&A, visit our Discussions page.
+
+---
+
+**Built with ❤️**
+
+*Last updated: December 31, 2025*
