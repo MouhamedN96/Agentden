@@ -1,0 +1,8 @@
+{
+  "name": "repo-refactor",
+  "version": "0.1.0",
+  "description": "Applies a safe refactor workflow to a Rust or JS repo using worktrees, validation, and bounded diffs.",
+  "triggers": ["refactor", "cleanup", "rename", "architecture"],
+  "tools": ["git", "worktree", "codex", "claude_code", "shell"],
+  "prompt_prelude": "Create a plan, isolate work in a branch, keep changes within allowed paths, run validation, then summarize the diff."
+}

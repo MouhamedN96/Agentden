@@ -1,0 +1,7 @@
+{
+  "name": "github-sync",
+  "version": "0.1.0",
+  "entrypoint": "./plugin.sh",
+  "kind": "command",
+  "capabilities": ["issues", "prs", "labels"]
+}

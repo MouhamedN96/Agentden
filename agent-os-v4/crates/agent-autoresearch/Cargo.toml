@@ -1,0 +1,37 @@
+[package]
+name = "agent-autoresearch"
+version = "0.1.0"
+edition = "2021"
+description = "Autonomous research arm for Agent-OS — runs overnight experiment loops, logs to Obsidian vault, syncs to NotebookLM"
+
+[dependencies]
+# Workspace shared
+anyhow = "1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["full"] }
+async-trait = "0.1"
+chrono = { version = "0.4", features = ["serde"] }
+uuid = { version = "1", features = ["v4"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# File watching (for auto-sync to Obsidian vault)
+notify = "6"
+
+# Markdown rendering / frontmatter
+toml = "0.8"
+
+# HTTP client (for optional NotebookLM webhook / future API)
+reqwest = { version = "0.12", features = ["json"] }
+
+# Process management
+which = "6"
+
+# Export packaging
+zip = "2"
+
+# Hook integration
+agent-hooks = { path = "../agent-hooks" }
+
+

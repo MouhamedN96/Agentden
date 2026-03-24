@@ -1,0 +1,17 @@
+[workspace]
+members = [
+  "crates/agentd",
+  "crates/agent-core",
+  "crates/agent-llm",
+  "crates/agent-memory",
+  "crates/agent-tools",
+  "crates/agent-router",
+  "crates/agent-devtools",
+  "crates/agent-scheduler",
+  "crates/agent-connectors",
+  "crates/agent-skills",
+  "crates/agent-hooks",
+  "crates/agent-plugins",
+  "crates/agent-autoresearch",
+]
+resolver = "2"

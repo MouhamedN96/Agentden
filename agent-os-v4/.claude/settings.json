@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Read",
+      "Write",
+      "Edit",
+      "Glob",
+      "Grep",
+      "LS",
+      "Bash(cargo *)",
+      "Bash(git *)",
+      "Bash(rustup *)",
+      "Bash(rustc *)",
+      "Bash(rg *)",
+      "Bash(just *)",
+      "Bash(systemctl --user *)",
+      "Bash(journalctl --user *)",
+      "Bash(timeout *)"
+    ],
+    "deny": [
+      "Bash(rm -rf /)",
+      "Bash(sudo rm -rf /)",
+      "Bash(curl * | bash)",
+      "Bash(wget * | bash)"
+    ]
+  }
+}

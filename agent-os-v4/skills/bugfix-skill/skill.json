@@ -1,0 +1,8 @@
+{
+  "name": "bugfix-repair",
+  "version": "0.1.0",
+  "description": "Runs a bugfix loop with log triage, focused edits, tests, and optional repair pass with the second dev tool.",
+  "triggers": ["bug", "fix", "repair", "failing test", "panic"],
+  "tools": ["claude_code", "codex", "shell", "git", "fs"],
+  "prompt_prelude": "Start from the failing signal, explain root cause, apply the minimal patch, and prove the fix with tests."
+}

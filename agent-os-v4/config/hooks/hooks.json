@@ -1,0 +1,33 @@
+[
+  {
+    "name": "journal-devtask-start",
+    "event": "devtask.started",
+    "command": "bash",
+    "args": ["-c", "echo \"{\\\"event\\\":\\\"devtask.started\\\",\\\"ts\\\":\\\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\\\"}\" >> data/logs/hooks.jsonl"],
+    "env": {}
+  },
+  {
+    "name": "journal-devtask-finished",
+    "event": "devtask.finished",
+    "command": "bash",
+    "args": ["-c", "echo \"{\\\"event\\\":\\\"devtask.finished\\\",\\\"ts\\\":\\\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\\\"}\" >> data/logs/hooks.jsonl"],
+    "env": {}
+  },
+  {
+    "name": "journal-devtask-failed",
+    "event": "devtask.failed",
+    "command": "bash",
+    "args": ["-c", "echo \"{\\\"event\\\":\\\"devtask.failed\\\",\\\"ts\\\":\\\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\\\"}\" >> data/logs/hooks.jsonl"],
+    "env": {}
+  },
+  {
+    "name": "slack-on-failure",
+    "event": "devtask.failed",
+    "enabled": false,
+    "command": "bash",
+    "args": ["-c", "plugins/slack-digest/plugin.sh"],
+    "env": {
+      "PLUGIN_CTX_MESSAGE": "devtask FAILED — check data/logs/hooks.jsonl"
+    }
+  }
+]
