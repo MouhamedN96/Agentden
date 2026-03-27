@@ -1,4 +1,4 @@
-# AgentDen Personal Setup
+# A-Den Personal Setup
 
 Personal setup and workflow repository for running a custom Agent-OS stack on top of AgentDen.
 
