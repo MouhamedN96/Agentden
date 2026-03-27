@@ -1,0 +1,20 @@
+{
+  "name": "autoresearch",
+  "version": "0.1.0",
+  "description": "Autonomous research loop — propose hypothesis, apply patch, run eval, keep or revert. Outputs Obsidian notes + NotebookLM export bundle.",
+  "triggers": [
+    "research",
+    "experiment",
+    "optimize",
+    "fine-tune",
+    "benchmark",
+    "overnight",
+    "autoresearch",
+    "improve metric",
+    "colbert",
+    "train",
+    "eval"
+  ],
+  "tools": ["ShellTool", "ClaudeCode"],
+  "prompt_prelude": "You are running as part of an autonomous research loop. Your job is to propose ONE concrete, testable hypothesis to improve the target metric. Read program.md first. Propose only changes to the files listed in `editable_files`. Be specific. Explain your reasoning. After proposing, apply the patch immediately — do not wait for confirmation. The loop will evaluate your change and revert if it doesn't improve the metric."
+}

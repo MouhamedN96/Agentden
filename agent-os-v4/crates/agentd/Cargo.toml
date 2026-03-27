@@ -1,0 +1,21 @@
+[package]
+name = "agentd"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1"
+clap = { version = "4", features = ["derive"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["fmt", "env-filter"] }
+serde_json = "1"
+agent-core = { path = "../agent-core" }
+agent-devtools = { path = "../agent-devtools" }
+agent-skills = { path = "../agent-skills" }
+agent-plugins = { path = "../agent-plugins" }
+agent-hooks = { path = "../agent-hooks" }
+agent-router = { path = "../agent-router" }
+agent-autoresearch = { path = "../agent-autoresearch" }
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+
+

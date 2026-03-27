@@ -1,0 +1,10 @@
+/target
+/.env
+/data/state.db
+/data/cache/*
+!/data/cache/.keep
+/data/logs/*
+!/data/logs/.keep
+/data/sessions/*
+!/data/sessions/.keep
+/.claude/settings.local.json

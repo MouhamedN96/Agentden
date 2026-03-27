@@ -1,0 +1,10 @@
+model = "gpt-5-codex"
+project_root_markers = [".git", "Cargo.toml"]
+
+[env_policy]
+inherit = "core"
+
+# Optional MCP example for a local Agent-OS MCP bridge later.
+# [mcp_servers.agent_os]
+# command = "./target/release/agentd"
+# args = ["mcp", "serve"]

@@ -1,0 +1,14 @@
+[Unit]
+Description=Personal Agent OS runtime
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/src/personal-agent-os-kit-v2
+EnvironmentFile=%h/src/personal-agent-os-kit-v2/.env
+ExecStart=%h/src/personal-agent-os-kit-v2/target/debug/agentd run
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=default.target
