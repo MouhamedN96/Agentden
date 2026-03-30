@@ -1,7 +1,6 @@
 # A-Den Personal Setup
 
-Personal setup and workflow repository for running a custom Agent-OS stack on top of AgentDen.
-
+Personal setup and workflow repository for running a custom Agent-OS Stack on VPS
 ## Provenance
 
 - Base repository: [MouhamedN96/Agentden](https://github.com/MouhamedN96/Agentden)
